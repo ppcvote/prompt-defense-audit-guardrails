@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prompt-defense-audit"
+version = "0.1.0"
+description = "Guardrails Hub validator that audits system prompts for missing defenses against 12 attack vectors. Pure regex, zero external deps, <5ms."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.9"
+authors = [
+    { name = "Min Yi Chen", email = "ppcvote@gmail.com" },
+]
+keywords = [
+    "guardrails",
+    "ai-security",
+    "prompt-defense",
+    "llm-security",
+    "prompt-injection",
+    "system-prompt",
+    "validator",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+    "guardrails-ai>=0.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4.0",
+    "pyright>=1.1.350",
+]
+
+[project.urls]
+Homepage = "https://github.com/ppcvote/prompt-defense-audit-guardrails"
+Repository = "https://github.com/ppcvote/prompt-defense-audit-guardrails"
+Issues = "https://github.com/ppcvote/prompt-defense-audit-guardrails/issues"
+
+[tool.setuptools.packages.find]
+include = ["validator*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-rP --tb=short"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM"]
+
+[tool.pyright]
+include = ["validator"]
+pythonVersion = "3.9"
+typeCheckingMode = "strict"
