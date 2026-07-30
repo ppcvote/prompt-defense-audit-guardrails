@@ -3,14 +3,14 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "guardrails-ai-prompt-defense-audit"
+name = "prompt-defense-audit-guardrails"
 version = "0.1.0"
 description = "Guardrails validator that audits system prompts for missing defenses against 12 attack vectors. Pure regex, zero external deps, <5ms."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.9"
 authors = [
-    { name = "Min Yi Chen", email = "ppcvote@gmail.com" },
+    { name = "MinYi Xie (Ultra Lab)", email = "risky9763@gmail.com" },
 ]
 keywords = [
     "guardrails",
@@ -50,7 +50,7 @@ Repository = "https://github.com/ppcvote/prompt-defense-audit-guardrails"
 Issues = "https://github.com/ppcvote/prompt-defense-audit-guardrails/issues"
 
 [tool.setuptools.packages.find]
-include = ["guardrails_ai*"]
+include = ["prompt_defense_audit_guardrails*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -64,6 +64,6 @@ line-length = 100
 select = ["E", "F", "I", "W", "UP", "B", "SIM"]
 
 [tool.pyright]
-include = ["guardrails_ai"]
+include = ["prompt_defense_audit_guardrails"]
 pythonVersion = "3.9"
 typeCheckingMode = "strict"

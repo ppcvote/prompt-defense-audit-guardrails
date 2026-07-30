@@ -7,7 +7,7 @@ threshold behavior, metadata overrides, edge cases.
 import pytest
 from guardrails.classes.validation.validation_result import FailResult, PassResult
 
-from guardrails_ai.prompt_defense_audit import PromptDefenseAudit
+from prompt_defense_audit_guardrails import PromptDefenseAudit
 
 
 # ---------------------------------------------------------------------------

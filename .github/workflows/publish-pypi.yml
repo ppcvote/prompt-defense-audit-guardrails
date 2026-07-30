@@ -2,7 +2,7 @@ name: Publish to PyPI
 
 # Trusted publishing (OIDC) — no long-lived token stored anywhere.
 # Requires the pending publisher to be registered once on pypi.org:
-#   project: guardrails-ai-prompt-defense-audit
+#   project: prompt-defense-audit-guardrails
 #   owner: ppcvote  repo: prompt-defense-audit-guardrails
 #   workflow: publish-pypi.yml  environment: pypi
 on:
@@ -23,7 +23,7 @@ jobs:
           python -m pip install --upgrade build twine
           python -m build
           python -m twine check dist/*
-      - name: Assert wheel ships only the namespace package
+      - name: Assert wheel ships only our own package
         run: |
           python - <<'EOF'
           import glob, zipfile
@@ -31,7 +31,9 @@ jobs:
           names = zipfile.ZipFile(whl).namelist()
           top = {n.split("/")[0] for n in names}
           assert "validator" not in top, f"top-level validator leaked: {sorted(top)}"
-          assert "guardrails_ai/__init__.py" not in names, "namespace __init__ present"
+          assert top <= {"prompt_defense_audit_guardrails"} | {
+              n for n in top if n.endswith(".dist-info")
+          }, f"unexpected top-level packages: {sorted(top)}"
           print("wheel layout OK:", sorted(top))
           EOF
       - uses: actions/upload-artifact@v4
