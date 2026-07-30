@@ -1,0 +1,53 @@
+name: Publish to PyPI
+
+# Trusted publishing (OIDC) — no long-lived token stored anywhere.
+# Requires the pending publisher to be registered once on pypi.org:
+#   project: guardrails-ai-prompt-defense-audit
+#   owner: ppcvote  repo: prompt-defense-audit-guardrails
+#   workflow: publish-pypi.yml  environment: pypi
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          python -m twine check dist/*
+      - name: Assert wheel ships only the namespace package
+        run: |
+          python - <<'EOF'
+          import glob, zipfile
+          whl = glob.glob("dist/*.whl")[0]
+          names = zipfile.ZipFile(whl).namelist()
+          top = {n.split("/")[0] for n in names}
+          assert "validator" not in top, f"top-level validator leaked: {sorted(top)}"
+          assert "guardrails_ai/__init__.py" not in names, "namespace __init__ present"
+          print("wheel layout OK:", sorted(top))
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
