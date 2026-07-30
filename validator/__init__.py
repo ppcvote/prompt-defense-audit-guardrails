@@ -1,9 +1,10 @@
-"""Prompt Defense Audit — Guardrails Hub Validator.
+"""Repo-local compatibility shim — not shipped in the PyPI wheel.
 
-Audits system prompts for missing defenses against 12 attack vectors.
-Pure regex, zero external deps, <5ms execution.
+The canonical import is ``guardrails_ai.prompt_defense_audit`` (public-PyPI
+convention per guardrails-ai/guardrails#1548). This shim keeps
+``from validator import PromptDefenseAudit`` working for existing clones.
 """
 
-from .validator import PromptDefenseAudit
+from guardrails_ai.prompt_defense_audit import PromptDefenseAudit
 
 __all__ = ["PromptDefenseAudit"]

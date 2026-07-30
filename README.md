@@ -7,20 +7,18 @@ Use it as a **pre-LLM gate** to catch insecure system prompts before they reach 
 ## Installation
 
 ```bash
-guardrails hub install hub://ultralab/prompt_defense_audit
+pip install guardrails-ai-prompt-defense-audit
 ```
 
-Or install directly:
-
-```bash
-pip install prompt-defense-audit
-```
+(The `guardrails hub install` CLI is deprecated upstream — validators now ship
+on public PyPI under the `guardrails-ai-*` namespace, importable as
+`guardrails_ai.prompt_defense_audit`; see guardrails-ai/guardrails#1548.)
 
 ## Quick Start
 
 ```python
 from guardrails import Guard
-from validator import PromptDefenseAudit
+from guardrails_ai.prompt_defense_audit import PromptDefenseAudit
 
 # Validate system prompts BEFORE sending to LLM
 guard = Guard().use(
@@ -138,7 +136,7 @@ Coverage: 1/12
 ### SDK Usage (Without Guard)
 
 ```python
-from validator import PromptDefenseAudit
+from guardrails_ai.prompt_defense_audit import PromptDefenseAudit
 
 validator = PromptDefenseAudit(threshold=60)
 
@@ -153,7 +151,7 @@ for check in checks:
 ```python
 # In your test suite
 import pytest
-from validator import PromptDefenseAudit
+from guardrails_ai.prompt_defense_audit import PromptDefenseAudit
 
 SYSTEM_PROMPT = open("prompts/system.txt").read()
 
