@@ -23,6 +23,23 @@ jobs:
           python -m pip install --upgrade build twine
           python -m build
           python -m twine check dist/*
+      - name: Show the project name PyPI will receive
+        # A pending publisher authenticates on owner/repo/workflow/environment,
+        # but the upload still 400s if this name differs from the one registered
+        # on pypi.org. Print it so a mismatch is one glance, not a log dig.
+        run: |
+          python - <<'EOF'
+          import glob, pathlib, re, zipfile
+          whl = glob.glob("dist/*.whl")[0]
+          meta = zipfile.ZipFile(whl).read(
+              [n for n in zipfile.ZipFile(whl).namelist()
+               if n.endswith(".dist-info/METADATA")][0]).decode()
+          name = re.search(r"^Name: (.+)$", meta, re.M).group(1)
+          ver = re.search(r"^Version: (.+)$", meta, re.M).group(1)
+          print(f"::notice::PyPI project name = {name!r} (version {ver}) "
+                f"- this must match the pending publisher registered on pypi.org")
+          EOF
+
       - name: Assert wheel ships only our own package
         run: |
           python - <<'EOF'
